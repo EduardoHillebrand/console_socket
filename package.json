@@ -1,0 +1,27 @@
+{
+  "name": "console_socket",
+  "version": "1.0.0",
+  "description": "a simple problem solving for removing console.log without lose the benefit of it",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EduardoHillebrand/console_socket.git"
+  },
+  "author": "Eduardo Hillebrand",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EduardoHillebrand/console_socket/issues"
+  },
+  "homepage": "https://github.com/EduardoHillebrand/console_socket#readme"
+}
