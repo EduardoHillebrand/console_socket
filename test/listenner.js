@@ -7,5 +7,5 @@ function cbkError(contents) {
 	console.error(contents);
 }
 
-consoleSocket.setChannel('impostacao');
+//consoleSocket.setChannel('impostacao');
 consoleSocket.Listen('localhost',cbkLog,cbkError);

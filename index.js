@@ -3,7 +3,6 @@
  * Copyright(c) 2019 Eduardo Hillebrand
  * MIT Licensed
  */
-
 'use strict'
 
 /**
@@ -11,8 +10,7 @@
  * @private
  */
 var os = require('os');
-var ifaces = os.networkInterfaces();
-const Server = require('socket.io');
+const SServer = require('socket.io');
 var io = null;
 var ioCli = require('socket.io-client');
 var ip = [];
@@ -27,7 +25,8 @@ var Port = 8181;
 module.exports = {
 	'Replace': Replacer,
 	'Listen': Listener,
-	'setChannel':setChannel
+	'setChannel':setChannel,
+	'setPort': setPort
 };
 
 /**
@@ -35,17 +34,17 @@ module.exports = {
  *
  * @public
  */
-function Replacer (channel=false) {
+function Replacer () {
 	if(!Channel)
-		Channel = channel;
-	io = new Server(Port);
+		io = new SServer(Port);
+	else
+		io = SServer.of('/'+Channel);
+		
+
 	io.on('connection', function(socket){
 		console.error('ccc');
-		io.on('subscribe', function(room){
-			console.error('jjj');
-			socket.join(room);
-		});
 	});
+	
 	
 	console.log("console_socket: Replace Called. the last console.log message you will see here. ");
 	console.log = ConsoleLogSocket;
@@ -61,25 +60,22 @@ function setPort(port) {
 }
 
 function ConsoleLogSocket () {
-	console.error(arguments);
-	if(Channel)
-		io.sockets.in(Channel).emit('log', JSON.stringify(arguments));
-	else
-		io.emit('log', JSON.stringify(arguments));		
+	console.error(Channel, arguments);
+	io.emit('log', JSON.stringify(arguments));		
 }
+
 function ConsoleErrorSocket () {
-	if(Channel)
-		io.sockets.in(Channel).emit('error', JSON.stringify(arguments));
-	else
-		io.emit('error', JSON.stringify(arguments));		
+	io.emit('error', JSON.stringify(arguments));		
 }
 
 function Listener(ip='localhost', callbackLog=console.log, callbackError=console.error) {
-	var socket = ioCli.connect('http://'+ip+':'+Port);
-	console.error(ip,Port,Channel);
 	if(Channel)
-		socket.emit('subscribe', Channel);  
-
+		var socket = ioCli('/'+Channel);
+	else
+		var socket = ioCli.connect('http://'+ip+':'+Port);
+		
+	console.error(ip,Port,Channel);
+	 
 	socket.on('log', function (data) {
 		data = JSON.parse(data)
 	  	callbackLog(data);
