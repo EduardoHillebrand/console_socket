@@ -1,5 +1,7 @@
 var consoleSocket = require("../index.js");
-consoleSocket.setChannel('impostacao');
+consoleSocket.setChannel('ChannelA');
+consoleSocket.setPort('8181'); //default
+consoleSocket.setIp('localhost');//default
 consoleSocket.Replace();
 
 function test(){

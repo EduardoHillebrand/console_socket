@@ -9,11 +9,10 @@
  * Module dependencies.
  * @private
  */
-var os = require('os');
 const SServer = require('socket.io');
 var io = null;
 var ioCli = require('socket.io-client');
-var ip = [];
+var Ip = 'localhost';
 var Channel = false;
 var Port = 8181;
 
@@ -37,8 +36,10 @@ module.exports = {
 function Replacer () {
 	if(!Channel)
 		io = new SServer(Port);
-	else
-		io = SServer.of('/'+Channel);
+	else{
+		var Sio = SServer(Port);
+		io = Sio.of('/'+Channel);
+	}
 		
 
 	io.on('connection', function(socket){
@@ -58,6 +59,9 @@ function setChannel(channel) {
 function setPort(port) {
 	Port = port;
 }
+function setIp(ip) {
+	Ip = ip;
+}
 
 function ConsoleLogSocket () {
 	console.error(Channel, arguments);
@@ -68,13 +72,16 @@ function ConsoleErrorSocket () {
 	io.emit('error', JSON.stringify(arguments));		
 }
 
-function Listener(ip='localhost', callbackLog=console.log, callbackError=console.error) {
-	if(Channel)
-		var socket = ioCli('/'+Channel);
-	else
-		var socket = ioCli.connect('http://'+ip+':'+Port);
+function Listener(callbackLog=console.log, callbackError=console.error) {
+	if(Channel){
+		console.error('/'+Channel);
+		var socket = ioCli('http://'+Ip+':'+Port+'/'+Channel);
+	}
+	else{
+		var socket = ioCli.connect('http://'+Ip+':'+Port);
+	}
 		
-	console.error(ip,Port,Channel);
+	console.error(Ip,Port,Channel);
 	 
 	socket.on('log', function (data) {
 		data = JSON.parse(data)
