@@ -66,7 +66,12 @@ function ConsoleErrorSocket () {
 	io.emit('error', JSON.stringify(arguments));		
 }
 
-function Listener(callbackLog=console.log, callbackError=console.error) {
+function Listener(_port, _ip, callbackLog=console.log, callbackError=console.error) {
+	if(_port)
+		Port = _port;
+	
+	if(_ip)
+		Ip = _ip;
 
 	var socket = ioCli.connect('http://'+Ip+':'+Port);
 		
